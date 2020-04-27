@@ -4,12 +4,12 @@
 \alias{fix_gene_names}
 \title{Correct gene names}
 \usage{
-fix_gene_names(df, plasmid = FALSE)
+fix_gene_names(df, ending)
 }
 \arguments{
 \item{df}{The ARIBA result data}
 
-\item{plasmid}{TRUE if the data is from plasmidfinder}
+\item{ending}{The file suffix of the input files from ARIBA}
 }
 \description{
 Function that extracts the gene name from the column "cluster" in the ARIBA results.

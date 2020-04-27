@@ -3,13 +3,14 @@
 #' Function that extracts the gene name from the column "cluster" in the ARIBA results.
 #'
 #' @param df The ARIBA result data
-#' @param plasmid TRUE if the data is from plasmidfinder
+#' @param ending The file suffix of the input files from ARIBA
 #'
 #' @author Håkon Kaspersen, \email{hakon.kaspersen@@protonmail.com}
 #'
 #' @export
+#' @import dplyr
 #'
-fix_gene_names <- function(df, plasmid = FALSE) {
+fix_gene_names <- function(df, ending) {
   genes <- unique(df$ref_name)
   new_names <- gsub("^(.*?)\\..*", "\\1", genes)
   new_names <- gsub("_", "", new_names, fixed = T)
@@ -28,17 +29,10 @@ fix_gene_names <- function(df, plasmid = FALSE) {
     mutate(genes = as.character(genes)) %>%
     rename(ref_name = genes)
 
-  if (plasmid == FALSE) {
-    df %>%
-      left_join(df2, by = "ref_name") %>%
-      mutate(
-        gene_names = as.character(gene_names),
-        ref = gsub("(.*?)_amr_report.tsv", "\\1", ref)
-      )
-  } else {
-    df %>%
-      left_join(df2, by = "ref_name") %>%
-      mutate(gene_names = as.character(gene_names),
-             ref = gsub("(.*?)/report.tsv", "\\1", ref))
-  }
+  df %>%
+    left_join(df2, by = "ref_name") %>%
+    mutate(
+      gene_names = as.character(gene_names),
+      ref = gsub(paste0("(.*?)", ending), "\\1", ref)
+    )
 }
