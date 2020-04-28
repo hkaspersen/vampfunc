@@ -41,13 +41,13 @@ check_flags <- function(df, acquired = TRUE) {
     "795"
   )
   if (acquired == TRUE) {
-    df %>%
-      select(ref, gene_names, flag, ref_ctg_change) %>%
+    df <- df %>%
+      select(ref, gene_names, cluster, flag, ref_ctg_change) %>%
       mutate(flag_result = as.integer(flag %in% acq_flags)) %>%
       rename("gene" = gene_names)
   } else {
-    df %>%
-      select(ref, gene_names, flag, ref_ctg_change) %>%
+    df <- df %>%
+      select(ref, gene_names, cluster, flag, ref_ctg_change) %>%
       mutate(flag_result = as.integer(flag %in% int_flags)) %>%
       rename("gene" = gene_names)
   }

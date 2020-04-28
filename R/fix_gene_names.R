@@ -10,19 +10,30 @@
 #' @export
 #' @import dplyr
 #'
-fix_gene_names <- function(df, ending) {
+fix_gene_names <- function(df, ending, db) {
   genes <- unique(df$ref_name)
-  new_names <- gsub("^(.*?)\\..*", "\\1", genes)
-  new_names <- gsub("_", "", new_names, fixed = T)
-  new_names <- gsub("-", "", new_names, fixed = T)
 
+  # correct the gene names with regex patterns
+  # specific for each database
+  if (db == "res") {
+    new_names <- gsub("^(.*?)\\..*", "\\1", genes)
+    new_names <- gsub("_", "", new_names, fixed = T)
+    new_names <- gsub("-", "", new_names, fixed = T)
+  }
+  if (db == "vfdb") {
+    new_names <- sub("\\..+", "", genes)
+  }
+  if (db == "virfinder") {
+    new_names <- gsub("^(.+_[0-9]+)_.+", "\\1", genes)
+  }
+
+  # match the database names to the new names
   gene_names <- c()
   for (i in new_names) {
-    p <-
-      paste(tolower(substring(i, 1, 3)),
-            substring(i, 4),
-            sep = "",
-            collapse = " ")
+    p <- paste(tolower(substring(i, 1, 3)),
+              substring(i, 4),
+              sep = "",
+              collapse = " ")
     gene_names <- c(gene_names, p)
   }
   df2 <- data.frame(genes, gene_names) %>%

@@ -4,7 +4,7 @@
 \alias{fix_gene_names}
 \title{Correct gene names}
 \usage{
-fix_gene_names(df, ending)
+fix_gene_names(df, ending, db)
 }
 \arguments{
 \item{df}{The ARIBA result data}
